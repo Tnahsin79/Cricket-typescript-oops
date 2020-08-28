@@ -1,0 +1,29 @@
+.col{
+    text-align: center;
+    align-content: center;
+}
+.maindiv{
+    margin: 2vw;
+}
+.btn{
+    background-color: transparent;
+    color: blue;
+}
+table{
+    border: 2px solid black;
+}
+tr{
+    border: 1px solid black;
+}
+td,th{
+    border: 1px solid black;
+    width: 7vw;
+    text-align: center;
+    font-weight: bold;
+}
+div{
+    font-weight: bold;
+}
+table{
+    width: 100%;
+}
