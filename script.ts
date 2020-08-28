@@ -1,13 +1,13 @@
-class Team{
+class Team{                              //team class declaration
     players:number[]=[];
     teamtotal:number;
     constructor(){
         this.teamtotal=0;
     }
-    score(run:number){
+    score(run:number){                  //score function to keep track of team score
         this.teamtotal+=run;
     }
-    pushrun(run:number){
+    pushRun(run:number){                  //pushrun function to push players run to team 
         this.players.push(run);
     }
 }
@@ -17,14 +17,14 @@ class Player{
     constructor(){
         this.playertotal=0;
     }
-    hitrun(run:number){
+    hitRun(run:number){                     //hitrun class to keep track of players score on each ball and total players run
         this.balls.push(run);
         this.playertotal+=run;
     }
 }
 
 var i,num;
-var start=()=>{
+var start=()=>{                             //starts game, initiate timer and disable and enables specific buttons
     num=60;
     i=setInterval(function(){ 
         (<HTMLSelectElement>document.getElementById("time")).innerText = `${num}`;
@@ -46,29 +46,30 @@ var start=()=>{
         team=2;
         player=1;
         ball=1;
-        TeamA.pushrun(p1.playertotal);
+        TeamA.pushRun(p1.playertotal);
         setTimeout(function(){
             clearInterval( i );
             (<HTMLSelectElement>document.getElementById("b")).disabled = true;
             (<HTMLSelectElement>document.getElementById("generate")).disabled = false;
-            TeamB.pushrun(p2.playertotal);
+            TeamB.pushRun(p2.playertotal);
         },60000);
     },60000);
 }
-//console.log("hello");
+
 var TeamA=new Team();
 var TeamB=new Team();
 var team=1,player=1,ball=1,prun=0,truns=0;
 var p1=new Player();
 var p2=new Player();
 
-var hita=()=>{
+var hitA=()=>{                                      //function hitA to perform function on clicking Hit 1 button 
         let run;
-        run=Math.floor(Math.random() * 7);
         if(ball<7)
         { 
+            run=Math.floor(Math.random() * 7);
             if(player>10)
             {
+                alert("1st innings is over.\nKindly switch to team B.");
                 (<HTMLSelectElement>document.getElementById("a")).disabled = true;
                 (<HTMLSelectElement>document.getElementById("b")).disabled = false;
                 team=2;
@@ -83,7 +84,7 @@ var hita=()=>{
             }
             else
             {
-                p1.hitrun(run);
+                p1.hitRun(run);
                 TeamA.score(run);
                 let ascore=(<HTMLSelectElement>document.getElementById("team-a-score"));
                 ascore.innerText=`${TeamA.teamtotal}`;
@@ -93,17 +94,15 @@ var hita=()=>{
                 ascore.innerText=`${run}`;
                 ball++;
             }
-            if(run===0)
-            { TeamA.pushrun(p1.playertotal); p1=new Player(); player++; ball=1; }
+            if(run===0 || ball===7)
+            { TeamA.pushRun(p1.playertotal); p1=new Player(); player++; ball=1; }
         }
-        else
-        { TeamA.pushrun(p1.playertotal); p1=new Player(); player++; ball=1; }
 }
-var hitb=()=>{
+var hitB=()=>{                                              //function hitB to perform function on clicking Hit 2 button 
     let run;
-    run=Math.floor(Math.random() * 7);
     if(ball<7)
     { 
+        run=Math.floor(Math.random() * 7);
         if(player>10)
         {
             clearInterval( i );
@@ -113,7 +112,7 @@ var hitb=()=>{
         }
         else
         {
-            p2.hitrun(run);
+            p2.hitRun(run);
             TeamB.score(run);
             let ascore=(<HTMLSelectElement>document.getElementById("team-b-score"));
             ascore.innerText=`${TeamB.teamtotal}`;
@@ -123,16 +122,16 @@ var hitb=()=>{
             ascore.innerText=`${run}`;
             ball++;
         }
-        if(run===0)
-        { TeamB.pushrun(p2.playertotal); p2=new Player(); player++; ball=1; }
+        if(run===0 || ball===7)
+        { TeamB.pushRun(p2.playertotal); p2=new Player(); player++; ball=1; }
     }
-    else
-    { TeamB.pushrun(p2.playertotal); p2=new Player(); player++; ball=1; }
 }
 
 var win,mom=0,maxscore;
-var genresult=()=>{
+var genResult=()=>{                                     //this will generate result after game is over and show result on screen
     let array;
+    clearInterval( i );
+    (<HTMLSelectElement>document.getElementById("time")).innerText = `${0}`;
     console.log(TeamA.players);
     console.log(TeamB.players);
     if(TeamA.teamtotal>TeamB.teamtotal)
@@ -156,7 +155,7 @@ var genresult=()=>{
 
 var maindiv=document.createElement("div");
 maindiv.setAttribute("class","maindiv");
-
+//title section
 var title=document.createElement("div");
 title.setAttribute("class","row");
 var titlecol=document.createElement("div");
@@ -166,8 +165,9 @@ titlename.innerText="CRICKET 10";
 titlecol.appendChild(titlename);
 title.appendChild(titlecol);
 var hr1=document.createElement("hr");
+//title section
 
-//score row
+//score row that will display score
 var board=document.createElement("div");
 board.setAttribute("class","row");
 var teamacol=document.createElement("div");
@@ -179,7 +179,7 @@ teamascore.setAttribute("id","team-a-score");
 teamascore.innerText="0";
 var hit1=document.createElement("button");
 hit1.innerText="HIT 1";
-hit1.setAttribute("onclick","hita()");
+hit1.setAttribute("onclick","hitA()");
 hit1.setAttribute("id","a");
 hit1.setAttribute("class","btn btn-primary");
 teamacol.append(teama,teamascore,hit1);
@@ -208,7 +208,7 @@ teambscore.innerText="0";
 var hit2=document.createElement("button");
 hit2.innerText="HIT 2";
 hit2.setAttribute("id","b");
-hit2.setAttribute("onclick","hitb()");
+hit2.setAttribute("onclick","hitB()");
 hit2.setAttribute("class","btn btn-primary");
 teambcol.append(teamb,teambscore,hit2);
 
@@ -216,9 +216,10 @@ board.appendChild(teamacol);
 board.appendChild(timercol);
 board.appendChild(teambcol);
 var hr2=document.createElement("hr");
+//score row that will display score
 
 var t=1;
-//table row
+//table row to dsplay table
 var table=document.createElement("div");
 table.setAttribute("class","row");
 
@@ -262,7 +263,7 @@ matchscore.setAttribute("class","col col-12 col-md-2");
 var generate=document.createElement("button");
 generate.innerText="Generate result";
 generate.setAttribute("id","generate");
-generate.setAttribute("onclick","genresult()");
+generate.setAttribute("onclick","genResult()");
 generate.setAttribute("class","btn btn-primary");
 var teamwon=document.createElement("div");
 teamwon.innerText="MATCH WON BY";
@@ -312,13 +313,12 @@ teambtab.setAttribute("class","col col-12 col-md-5");
         table2.appendChild(tbody);
     }
     teambtab.appendChild(table2);
-//createtable();
 
 table.appendChild(teamatab);
 table.appendChild(matchscore);
 table.appendChild(teambtab);
 var hr3=document.createElement("hr");
-//table row
+//table row to dsplay table
 
 
 maindiv.appendChild(title);
@@ -328,7 +328,7 @@ maindiv.appendChild(hr2);
 maindiv.appendChild(table);
 maindiv.appendChild(hr3);
 document.body.appendChild(maindiv);
-(<HTMLSelectElement>document.getElementById("a")).disabled = true;
-(<HTMLSelectElement>document.getElementById("b")).disabled = true;
-(<HTMLSelectElement>document.getElementById("generate")).disabled = true;
+(<HTMLSelectElement>document.getElementById("a")).disabled = true;              //initially disabled
+(<HTMLSelectElement>document.getElementById("b")).disabled = true;              //initially disabled
+(<HTMLSelectElement>document.getElementById("generate")).disabled = true;       //initially disabled
 
